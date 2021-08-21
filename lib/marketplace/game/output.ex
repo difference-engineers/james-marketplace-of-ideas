@@ -1,11 +1,13 @@
-defmodule Marketplace.Game.Player do
+defmodule Marketplace.Game.Output do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  schema "players" do
-    field :name, :string
+  schema "outputs" do
+    field :amount, :integer
+    field :plot_id, :binary_id
+    field :resource_id, :binary_id
 
     timestamps()
   end
@@ -13,7 +15,7 @@ defmodule Marketplace.Game.Player do
   @doc false
   def changeset(record, attrs) do
     record
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:amount])
+    |> validate_required([:amount])
   end
 end

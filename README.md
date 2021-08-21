@@ -1,19 +1,9 @@
 # Marketplace
 
-To start your Phoenix server:
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+A player
+A resource (the idea of a beer)
+A generator (the idea of a grain farm)
+A plot, belongs to player and generator (tom's grain farm)
+A output, belongs to a plot and a resource (the idea that tom's grain farm can produce beer)
+A product, belongs to a player and an output (a pint of beer from the local grain farm owned by Tom)

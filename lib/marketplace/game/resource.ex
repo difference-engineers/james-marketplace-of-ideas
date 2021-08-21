@@ -16,8 +16,8 @@ defmodule Marketplace.Game.Resource do
   end
 
   @doc false
-  def changeset(resource, attrs) do
-    resource
+  def changeset(record, attrs) do
+    record
     |> cast(attrs, [:name, :export, :import, :luxury_export, :luxury_import, :perishable])
     |> validate_required([:name, :export, :import, :luxury_export, :luxury_import, :perishable])
   end
