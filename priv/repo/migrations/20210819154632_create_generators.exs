@@ -5,7 +5,6 @@ defmodule Marketplace.Repo.Migrations.CreateGenerators do
     create table(:generators, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :name, :string, null: false
-      add :profits, :map, null: false, default: []
 
       timestamps()
     end

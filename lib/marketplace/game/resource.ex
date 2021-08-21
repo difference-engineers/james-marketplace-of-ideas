@@ -5,12 +5,14 @@ defmodule Marketplace.Game.Resource do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "resources" do
-    field :export, :integer
-    field :import, :integer
-    field :luxury_export, :integer
-    field :luxury_import, :integer
+    field :export, :integer, default: 0
+    field :import, :integer, default: 0
+    field :luxury_export, :integer, default: 0
+    field :luxury_import, :integer, default: 0
     field :name, :string
     field :perishable, :boolean, default: false
+    field :guildable, :boolean, default: true
+    field :importable, :boolean, default: true
 
     timestamps()
   end

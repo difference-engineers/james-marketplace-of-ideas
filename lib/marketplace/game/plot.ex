@@ -5,7 +5,8 @@ defmodule Marketplace.Game.Plot do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "plots" do
-    field :level, :integer
+    field :level, :integer, default: 0
+    field :guilding, :integer, default: 0
     field :player_id, :binary_id
     field :generator_id, :binary_id
 

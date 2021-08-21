@@ -5,8 +5,8 @@ defmodule Marketplace.Game.Output do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "outputs" do
-    field :amount, :integer
-    field :plot_id, :binary_id
+    field :amounts, {:array, :integer}, default: []
+    field :generator_id, :binary_id
     field :resource_id, :binary_id
 
     timestamps()

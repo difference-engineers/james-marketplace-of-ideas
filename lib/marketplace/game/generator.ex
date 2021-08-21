@@ -6,7 +6,6 @@ defmodule Marketplace.Game.Generator do
   @foreign_key_type :binary_id
   schema "generators" do
     field :name, :string
-    field :profits, :map
 
     timestamps()
   end

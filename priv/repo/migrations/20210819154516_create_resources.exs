@@ -10,6 +10,8 @@ defmodule Marketplace.Repo.Migrations.CreateResources do
       add :luxury_export, :integer, null: false, default: 0
       add :luxury_import, :integer, null: false, default: 0
       add :perishable, :boolean, default: false, null: false
+      add :guildable, :boolean, null: false, default: true
+      add :importable, :boolean, null: false, default: true
 
       timestamps()
     end

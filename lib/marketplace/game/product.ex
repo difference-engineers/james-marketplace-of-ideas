@@ -5,8 +5,8 @@ defmodule Marketplace.Game.Product do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "products" do
-    field :player_id, :binary_id
-    field :output_id, :binary_id
+    field :plot_id, :binary_id
+    field :resource_id, :binary_id
 
     timestamps()
   end
