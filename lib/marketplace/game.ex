@@ -191,10 +191,8 @@ defmodule Marketplace.Game do
 
   """
   def change_generator(%Marketplace.Game.Generator{} = generator, attrs \\ %{}) do
-    Output.changeset(generator, attrs)
+    Marketplace.Game.Generator.changeset(generator, attrs)
   end
-
-  alias Marketplace.Game.Player
 
   @doc """
   Returns the list of players.
@@ -202,28 +200,28 @@ defmodule Marketplace.Game do
   ## Examples
 
       iex> list_players()
-      [%Player{}, ...]
+      [%Marketplace.Game.Player{}, ...]
 
   """
   def list_players do
-    Marketplace.Repo.all(Player)
+    Marketplace.Repo.all(Marketplace.Game.Player)
   end
 
   @doc """
   Gets a single player.
 
-  Raises `Ecto.NoResultsError` if the Player does not exist.
+  Raises `Ecto.NoResultsError` if the Marketplace.Game.Player does not exist.
 
   ## Examples
 
       iex> get_player!(123)
-      %Player{}
+      %Marketplace.Game.Player{}
 
       iex> get_player!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_player!(id), do: Marketplace.Repo.get!(Player, id)
+  def get_player!(id), do: Marketplace.Repo.get!(Marketplace.Game.Player, id)
 
   @doc """
   Creates a player.
@@ -231,15 +229,15 @@ defmodule Marketplace.Game do
   ## Examples
 
       iex> create_player(%{field: value})
-      {:ok, %Player{}}
+      {:ok, %Marketplace.Game.Player{}}
 
       iex> create_player(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
   def create_player(attrs \\ %{}) do
-    %Player{}
-    |> Player.changeset(attrs)
+    %Marketplace.Game.Player{}
+    |> Marketplace.Game.Player.changeset(attrs)
     |> Marketplace.Repo.insert()
   end
 
@@ -249,15 +247,15 @@ defmodule Marketplace.Game do
   ## Examples
 
       iex> update_player(player, %{field: new_value})
-      {:ok, %Player{}}
+      {:ok, %Marketplace.Game.Player{}}
 
       iex> update_player(player, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_player(%Player{} = player, attrs) do
+  def update_player(%Marketplace.Game.Player{} = player, attrs) do
     player
-    |> Player.changeset(attrs)
+    |> Marketplace.Game.Player.changeset(attrs)
     |> Marketplace.Repo.update()
   end
 
@@ -267,13 +265,13 @@ defmodule Marketplace.Game do
   ## Examples
 
       iex> delete_player(player)
-      {:ok, %Player{}}
+      {:ok, %Marketplace.Game.Player{}}
 
       iex> delete_player(player)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_player(%Player{} = player) do
+  def delete_player(%Marketplace.Game.Player{} = player) do
     Marketplace.Repo.delete(player)
   end
 
@@ -283,11 +281,11 @@ defmodule Marketplace.Game do
   ## Examples
 
       iex> change_player(player)
-      %Ecto.Changeset{data: %Player{}}
+      %Ecto.Changeset{data: %Marketplace.Game.Player{}}
 
   """
-  def change_player(%Player{} = player, attrs \\ %{}) do
-    Player.changeset(player, attrs)
+  def change_player(%Marketplace.Game.Player{} = player, attrs \\ %{}) do
+    Marketplace.Game.Player.changeset(player, attrs)
   end
 
   @doc """
@@ -306,7 +304,7 @@ defmodule Marketplace.Game do
   @doc """
   Gets a single plot.
 
-  Raises `Ecto.NoResultsError` if the Player resource generator does not exist.
+  Raises `Ecto.NoResultsError` if the Marketplace.Game.Player resource generator does not exist.
 
   ## Examples
 
@@ -400,7 +398,7 @@ defmodule Marketplace.Game do
   @doc """
   Gets a single product.
 
-  Raises `Ecto.NoResultsError` if the Player resource transaction does not exist.
+  Raises `Ecto.NoResultsError` if the Marketplace.Game.Player resource transaction does not exist.
 
   ## Examples
 
@@ -477,8 +475,6 @@ defmodule Marketplace.Game do
   def change_product(%Marketplace.Game.Product{} = product, attrs \\ %{}) do
     Marketplace.Game.Product.changeset(product, attrs)
   end
-
-  alias Marketplace.Game.Marketplace.Game.Output
 
   @doc """
   Returns the list of output.
