@@ -13,6 +13,7 @@ defmodule Marketplace.Game.Resource do
     field :perishable, :boolean, default: false
     field :guildable, :boolean, default: true
     field :importable, :boolean, default: true
+    has_many :material_costs, Marketplace.Game.MaterialCost, foreign_key: :product_resource_id
 
     timestamps()
   end
@@ -20,7 +21,7 @@ defmodule Marketplace.Game.Resource do
   @doc false
   def changeset(record, attrs) do
     record
-    |> cast(attrs, [:name, :export, :import, :luxury_export, :luxury_import, :perishable])
-    |> validate_required([:name, :export, :import, :luxury_export, :luxury_import, :perishable])
+    |> cast(attrs, [:name, :export, :import, :luxury_export, :luxury_import, :perishable, :guildable, :importable])
+    |> validate_required([:name, :export, :import, :luxury_export, :luxury_import, :perishable, :guildable, :importable])
   end
 end

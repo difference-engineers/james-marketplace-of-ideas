@@ -6,6 +6,7 @@ defmodule Marketplace.Game.Player do
   @foreign_key_type :binary_id
   schema "players" do
     field :name, :string
+    has_many :plots, Marketplace.Game.Plot
 
     timestamps()
   end

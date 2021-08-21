@@ -5,8 +5,8 @@ defmodule Marketplace.Game.Product do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "products" do
-    field :plot_id, :binary_id
-    field :resource_id, :binary_id
+    belongs_to :plot, Marketplace.Game.Plot
+    belongs_to :resource, Marketplace.Game.Resource
 
     timestamps()
   end
@@ -15,6 +15,8 @@ defmodule Marketplace.Game.Product do
   def changeset(record, attrs) do
     record
     |> cast(attrs, [])
+    |> put_assoc(:plot, attrs.plot)
+    |> put_assoc(:resource, attrs.resource)
     |> validate_required([])
   end
 end

@@ -5,6 +5,14 @@ defmodule Marketplace.Game do
 
   import Ecto.Query, warn: false
 
+  def turn() do
+    Marketplace.Game.list_players()
+    |> Enum.map(fn player ->  Marketplace.Repo.preload(player, plots: [generator: [:outputs], resource: []]) end)
+    |> Enum.map(fn player ->
+      player.plots |> Enum.map(&Marketplace.Game.Plot.work/1)
+    end)
+  end
+
   @doc """
   Returns the list of resources.
 
@@ -568,5 +576,99 @@ defmodule Marketplace.Game do
   """
   def change_output(%Marketplace.Game.Output{} = output, attrs \\ %{}) do
     Marketplace.Game.Output.changeset(output, attrs)
+  end
+
+  @doc """
+  Returns the list of material_costs.
+
+  ## Examples
+
+      iex> list_material_costs()
+      [%Marketplace.Game.MaterialCost{}, ...]
+
+  """
+  def list_material_costs do
+    Marketplace.Repo.all(Marketplace.Game.MaterialCost)
+  end
+
+  @doc """
+  Gets a single material_cost.
+
+  Raises `Ecto.NoResultsError` if the Material cost does not exist.
+
+  ## Examples
+
+      iex> get_material_cost!(123)
+      %Marketplace.Game.MaterialCost{}
+
+      iex> get_material_cost!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_material_cost!(id), do: Marketplace.Repo.get!(Marketplace.Game.MaterialCost, id)
+
+  @doc """
+  Creates a material_cost.
+
+  ## Examples
+
+      iex> create_material_cost(%{field: value})
+      {:ok, %Marketplace.Game.MaterialCost{}}
+
+      iex> create_material_cost(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_material_cost(attrs \\ %{}) do
+    %Marketplace.Game.MaterialCost{}
+    |> Marketplace.Game.MaterialCost.changeset(attrs)
+    |> Marketplace.Repo.insert()
+  end
+
+  @doc """
+  Updates a material_cost.
+
+  ## Examples
+
+      iex> update_material_cost(material_cost, %{field: new_value})
+      {:ok, %Marketplace.Game.MaterialCost{}}
+
+      iex> update_material_cost(material_cost, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_material_cost(%Marketplace.Game.MaterialCost{} = material_cost, attrs) do
+    material_cost
+    |> Marketplace.Game.MaterialCost.changeset(attrs)
+    |> Marketplace.Repo.update()
+  end
+
+  @doc """
+  Deletes a material_cost.
+
+  ## Examples
+
+      iex> delete_material_cost(material_cost)
+      {:ok, %Marketplace.Game.MaterialCost{}}
+
+      iex> delete_material_cost(material_cost)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_material_cost(%Marketplace.Game.MaterialCost{} = material_cost) do
+    Marketplace.Repo.delete(material_cost)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking material_cost changes.
+
+  ## Examples
+
+      iex> change_material_cost(material_cost)
+      %Ecto.Changeset{data: %Marketplace.Game.MaterialCost{}}
+
+  """
+  def change_material_cost(%Marketplace.Game.MaterialCost{} = material_cost, attrs \\ %{}) do
+    Marketplace.Game.MaterialCost.changeset(material_cost, attrs)
   end
 end

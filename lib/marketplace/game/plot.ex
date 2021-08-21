@@ -7,8 +7,8 @@ defmodule Marketplace.Game.Plot do
   schema "plots" do
     field :level, :integer, default: 0
     field :guilding, :integer, default: 0
-    field :player_id, :binary_id
-    field :generator_id, :binary_id
+    belongs_to :player, Marketplace.Game.Player
+    belongs_to :generator, Marketplace.Game.Generator
 
     timestamps()
   end
@@ -17,6 +17,14 @@ defmodule Marketplace.Game.Plot do
   def changeset(record, attrs) do
     record
     |> cast(attrs, [:level])
+    |> put_assoc(:player, attrs.player)
+    |> put_assoc(:generator, attrs.generator)
     |> validate_required([:level])
+  end
+
+  def work(plot) do
+    plot.generator.outputs
+      |> Enum.flat_map(&Marketplace.Game.Output.produce(&1, plot))
+      |> Enum.map(&Marketplace.Game.create_product/1)
   end
 end

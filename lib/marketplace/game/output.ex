@@ -6,8 +6,8 @@ defmodule Marketplace.Game.Output do
   @foreign_key_type :binary_id
   schema "outputs" do
     field :amounts, {:array, :integer}, default: []
-    field :generator_id, :binary_id
-    field :resource_id, :binary_id
+    belongs_to :generator, Marketplace.Game.Generator
+    belongs_to :resource, Marketplace.Game.Resource
 
     timestamps()
   end
@@ -15,7 +15,32 @@ defmodule Marketplace.Game.Output do
   @doc false
   def changeset(record, attrs) do
     record
-    |> cast(attrs, [:amount])
-    |> validate_required([:amount])
+    |> cast(attrs, [:amounts])
+    |> put_assoc(:resource, attrs.resource)
+    |> put_assoc(:generator, attrs.generator)
+    |> validate_required([:amounts])
+  end
+
+  def produce(output, plot) do
+    quantity = case plot.guilding do
+      0 -> output.amounts[plot.level]
+      _ -> output.amounts[plot.level + 1]
+    end
+
+    products = %{plot: plot, resource: output.resource}
+      |> List.duplicate(quantity)
+      |> Enum.map(fn product ->
+        case plot.guilding do
+          2 -> Map.merge(product, %{luxury: true})
+          _ -> product
+        end
+      end)
+
+    case plot.guilding do
+      1 ->
+        [head | tail] = products
+        [Map.merge(head, %{luxury: true}), tail]
+      _ -> products
+    end
   end
 end

@@ -6,6 +6,7 @@ defmodule Marketplace.Game.Generator do
   @foreign_key_type :binary_id
   schema "generators" do
     field :name, :string
+    has_many :outputs, Marketplace.Game.Output
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule Marketplace.Game.Generator do
   @doc false
   def changeset(record, attrs) do
     record
-    |> cast(attrs, [:name, :profits])
-    |> validate_required([:name, :profits])
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
   end
 end
