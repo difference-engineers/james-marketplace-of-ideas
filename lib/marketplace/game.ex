@@ -6,7 +6,6 @@ defmodule Marketplace.Game do
   import Ecto.Query, warn: false
 
   def turn() do
-    # transaction = Ecto.Multi.new
     Marketplace.Game.list_players()
     |> Enum.map(&Marketplace.Repo.preload(&1,
       plots: [
@@ -34,32 +33,48 @@ defmodule Marketplace.Game do
     end)
     |> Enum.sort_by(fn product_attributes -> product_attributes.resource.tier end)
     |> Enum.map(fn product_attributes ->
-      player = product_attributes.plot.player
+      player_id = product_attributes.plot.player_id
       case product_attributes.resource.material_costs do
         [] -> Marketplace.Game.create_product(product_attributes)
         _ ->
           Marketplace.Repo.transaction(fn ->
             product_attributes.resource.material_costs
             |> Enum.map(fn material_cost ->
-              all_product_ids = (player |> Marketplace.Repo.reload |> Marketplace.Repo.preload(:products)).products |> Enum.map(fn product -> product.id end)
-
-              usable_products_query = from(
+              usable_common_product_query = from(
                   product in Marketplace.Game.Product,
-                  where: product.resource_id == ^material_cost.required_resource_id and product.id in ^all_product_ids,
+                  join: plot in Marketplace.Game.Plot,
+                  on: product.plot_id == plot.id,
+                  join: player in Marketplace.Game.Player,
+                  on: plot.player_id == player.id,
+                  where: product.resource_id == ^material_cost.required_resource_id and player.id == ^player_id,
                   limit: ^material_cost.amount
                 )
+
               usable_luxury_products_query = from(
                 product in Marketplace.Game.Product,
-                where: product.resource_id == ^material_cost.required_resource.luxury_id and product.id in ^all_product_ids,
+                join: plot in Marketplace.Game.Plot,
+                on: product.plot_id == plot.id,
+                join: player in Marketplace.Game.Player,
+                on: plot.player_id == player.id,
+                where: product.resource_id == ^material_cost.required_resource.luxury_id and player.id == ^player_id,
                 limit: ^material_cost.amount
               )
-              usable_products = [usable_products_query, usable_luxury_products_query] |> Enum.flat_map(&Marketplace.Repo.all/1)
-              require IEx; IEx.pry
+
+              usable_products = [usable_common_product_query, usable_luxury_products_query] |> Enum.flat_map(&Marketplace.Repo.all/1)
+
               if length(usable_products) >= material_cost.amount do
-                usable_products |> Enum.take(material_cost.amount) |> Enum.map(&Marketplace.Game.delete_product/1)
-                Marketplace.Game.create_product(product_attributes)
+                usable_products |> Enum.take(material_cost.amount) |> Enum.each(&Marketplace.Game.delete_product/1)
+                true
+              else
+                false
               end
+              # FIXME: We're deleting wood before we even check to see if we have textiles
             end)
+            |> Enum.all?
+            |> case do
+              true ->  Marketplace.Game.create_product(product_attributes)
+              false -> nil
+            end
           end)
       end
     end)

@@ -26,7 +26,7 @@
 {:ok, beer_resource} = Marketplace.Game.create_resource(%{name: "Beer", export: 8, import: 16, luxury: luxury_beer_resource})
 {:ok, luxury_seafood_resource} = Marketplace.Game.create_resource(%{name: "Luxury Seafood", export: 15, import: 30, perishable: true})
 {:ok, seafood_resource} = Marketplace.Game.create_resource(%{name: "Seafood", export: 5, import: 10, luxury: luxury_seafood_resource, perishable: true})
-{:ok, warship_resource} = Marketplace.Game.create_resource(%{name: "Warship", export: 5, importable: false})
+{:ok, warship_resource} = Marketplace.Game.create_resource(%{name: "Warship", export: 5, importable: false, tier: 1})
 {:ok, luxury_stone_resource} = Marketplace.Game.create_resource(%{name: "Marble", export: 18, import: 36})
 {:ok, stone_resource} = Marketplace.Game.create_resource(%{name: "Stone", export: 6, import: 12, luxury: luxury_stone_resource})
 {:ok, luxury_metal_resource} = Marketplace.Game.create_resource(%{name: "Luxury Metal", export: 18, import: 36})
