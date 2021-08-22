@@ -17,14 +17,13 @@ defmodule Marketplace.Game.Plot do
   @doc false
   def changeset(record, attrs) do
     record
-    |> cast(attrs, [:level])
+    |> cast(attrs, [:level, :guilding])
     |> put_assoc(:player, attrs.player)
     |> put_assoc(:generator, attrs.generator)
-    |> validate_required([:level])
+    |> validate_required([:level, :guilding])
   end
 
   def work(plot) do
-    IO.inspect("work")
     plot.generator.outputs
       |> Enum.flat_map(&Marketplace.Game.Output.produce(&1, plot))
       |> Enum.map(&Marketplace.Game.create_product/1)

@@ -27,20 +27,12 @@ defmodule Marketplace.Game.Output do
       _ -> Enum.at(output.amounts, plot.level + 1)
     end
 
-    products = %{plot: plot, resource: output.resource}
-      |> List.duplicate(quantity)
-      |> Enum.map(fn product ->
-        case plot.guilding do
-          2 -> Map.merge(product, %{luxury: true})
-          _ -> product
-        end
-      end)
+    products = %{plot: plot, resource: output.resource} |> List.duplicate(quantity)
 
     case plot.guilding do
-      1 ->
-        [head | tail] = products
-        [Map.merge(head, %{luxury: true}), tail]
-      _ -> products
+      0 -> products
+      1 -> put_in(products, [Access.at(0), :luxury], true)
+      2 -> products |> Enum.map(fn product -> Map.merge(product, %{luxury: true}) end)
     end
   end
 end
