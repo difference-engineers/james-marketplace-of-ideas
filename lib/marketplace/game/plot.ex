@@ -22,10 +22,4 @@ defmodule Marketplace.Game.Plot do
     |> put_assoc(:generator, attrs.generator)
     |> validate_required([:level, :guilding])
   end
-
-  def work(plot) do
-    plot.generator.outputs
-      |> Enum.flat_map(&Marketplace.Game.Output.produce(&1, plot))
-      |> Enum.map(&Marketplace.Game.create_product/1)
-  end
 end

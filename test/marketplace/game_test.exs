@@ -20,19 +20,10 @@ defmodule Marketplace.GameTest do
 
     Marketplace.Game.turn()
     Marketplace.Game.list_products()
-      |> Enum.map(&Marketplace.Repo.preload(&1, plot: [:player, :generator], resource: []))
+      |> Enum.map(&Marketplace.Repo.preload(&1, plot: [:player, :generator], resource: [:luxury]))
       |> Enum.group_by(fn product -> product.resource.name end)
-      |> Enum.map(fn {name, products} ->
-        {
-          name,
-          products
-          |> Enum.split_with(fn product -> product.luxury end)
-          |> Tuple.to_list
-          |> Enum.map(&length/1)
-          |> List.to_tuple()
-        }
-      end)
+      |> Enum.map(fn {name, products} -> { name, products |> Enum.count } end)
       |> Enum.into(%{})
-      |> is(%{"Game Meat" => {3, 2}, "Mutton" => {0, 8}, "Seafood" => {1, 7}, "Textile" => {0, 10}, "Warship" => {1, 3}, "Wood" => {7, 7}})
+      |> is(%{"Game Meat" => 2, "Mutton" => 8, "Seafood" => 7, "Textile" => 6, "Warship" => 4, "Wood" => 0, "Luxury Game Meat" => 3, "Luxury Seafood" => 1, "Luxury Wood" => 6})
   end
 end

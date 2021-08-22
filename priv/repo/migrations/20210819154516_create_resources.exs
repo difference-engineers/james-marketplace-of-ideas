@@ -5,16 +5,16 @@ defmodule Marketplace.Repo.Migrations.CreateResources do
     create table(:resources, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :name, :string, null: false
+      add :tier, :integer, null: false, default: 0
       add :export, :integer, null: false, default: 0
       add :import, :integer, null: false, default: 0
-      add :luxury_export, :integer, null: false, default: 0
-      add :luxury_import, :integer, null: false, default: 0
       add :perishable, :boolean, default: false, null: false
-      add :guildable, :boolean, null: false, default: true
       add :importable, :boolean, null: false, default: true
+      add :luxury_id, references(:resources, on_delete: :nothing, type: :binary_id)
 
       timestamps()
     end
 
+    create index(:resources, [:luxury_id])
   end
 end

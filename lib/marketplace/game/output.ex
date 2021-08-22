@@ -31,8 +31,8 @@ defmodule Marketplace.Game.Output do
 
     case plot.guilding do
       0 -> products
-      1 -> put_in(products, [Access.at(0), :luxury], true)
-      2 -> products |> Enum.map(fn product -> Map.merge(product, %{luxury: true}) end)
+      1 -> put_in(products, [Access.at(0), :resource], Enum.at(products, 0).resource.luxury || Enum.at(products, 0).resource )
+      2 -> products |> Enum.map(fn product -> Map.merge(product, %{resource: product.resource.luxury || product.resource}) end)
     end
   end
 end

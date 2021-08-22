@@ -7,8 +7,15 @@ defmodule Marketplace.Game do
 
   def turn() do
     Marketplace.Game.list_players()
-    |> Enum.map(&Marketplace.Repo.preload(&1, plots: [generator: [outputs: [:resource]]]))
-    |> Enum.each(fn player -> player.plots |> Enum.map(&Marketplace.Game.Plot.work/1) end)
+    |> Enum.map(&Marketplace.Repo.preload(&1, plots: [generator: [outputs: [resource: [:luxury]]]]))
+    |> Enum.flat_map(fn player ->
+      player.plots
+      |> Enum.flat_map(fn plot ->
+        plot.generator.outputs
+        |> Enum.flat_map(&Marketplace.Game.Output.produce(&1, plot))
+      end)
+    end)
+    |> Enum.map(&Marketplace.Game.create_product/1)
   end
 
   @doc """
