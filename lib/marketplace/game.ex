@@ -7,10 +7,8 @@ defmodule Marketplace.Game do
 
   def turn() do
     Marketplace.Game.list_players()
-    |> Enum.map(fn player ->  Marketplace.Repo.preload(player, plots: [generator: [:outputs], resource: []]) end)
-    |> Enum.map(fn player ->
-      player.plots |> Enum.map(&Marketplace.Game.Plot.work/1)
-    end)
+    |> Enum.map(&Marketplace.Repo.preload(&1, plots: [generator: [outputs: [:resource]]]))
+    |> Enum.map(fn player -> player.plots |> Enum.map(&Marketplace.Game.Plot.work/1) end)
   end
 
   @doc """

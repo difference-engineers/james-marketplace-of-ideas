@@ -18,12 +18,21 @@
       "username": "postgres",
       "password": "postgres"
     }, {
-      "name": "Application database",
+      "name": "Application (Development) database",
       "driver": "PostgreSQL",
       "previewLimit": 50,
       "server": "localhost",
       "port": 5432,
       "database": "marketplace_dev",
+      "username": "postgres",
+      "password": "postgres"
+    }, {
+      "name": "Application (Test) database",
+      "driver": "PostgreSQL",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "database": "marketplace_test",
       "username": "postgres",
       "password": "postgres"
     }]

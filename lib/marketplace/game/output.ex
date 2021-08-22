@@ -23,8 +23,8 @@ defmodule Marketplace.Game.Output do
 
   def produce(output, plot) do
     quantity = case plot.guilding do
-      0 -> output.amounts[plot.level]
-      _ -> output.amounts[plot.level + 1]
+      0 -> Enum.at(output.amounts, plot.level)
+      _ -> Enum.at(output.amounts, plot.level + 1)
     end
 
     products = %{plot: plot, resource: output.resource}

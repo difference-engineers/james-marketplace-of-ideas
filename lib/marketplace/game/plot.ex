@@ -1,6 +1,7 @@
 defmodule Marketplace.Game.Plot do
   use Ecto.Schema
   import Ecto.Changeset
+  require Logger
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -23,6 +24,7 @@ defmodule Marketplace.Game.Plot do
   end
 
   def work(plot) do
+    IO.inspect("work")
     plot.generator.outputs
       |> Enum.flat_map(&Marketplace.Game.Output.produce(&1, plot))
       |> Enum.map(&Marketplace.Game.create_product/1)
