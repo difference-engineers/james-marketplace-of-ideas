@@ -6,16 +6,79 @@ defmodule Marketplace.Game do
   import Ecto.Query, warn: false
 
   def turn() do
+    # transaction = Ecto.Multi.new
     Marketplace.Game.list_players()
-    |> Enum.map(&Marketplace.Repo.preload(&1, plots: [generator: [outputs: [resource: [:luxury]]]]))
+    |> Enum.map(&Marketplace.Repo.preload(&1,
+      plots: [
+        player: [:products],
+        generator: [
+          outputs: [
+            resource: [
+              material_costs: [
+                required_resource: [
+                  luxury: [:material_costs]
+                ]
+              ],
+              luxury: [:material_costs]
+            ],
+          ]
+        ]
+      ]
+    ))
     |> Enum.flat_map(fn player ->
       player.plots
       |> Enum.flat_map(fn plot ->
         plot.generator.outputs
-        |> Enum.flat_map(&Marketplace.Game.Output.produce(&1, plot))
+        |> Enum.flat_map(&Marketplace.Game.produce(&1, plot))
       end)
     end)
-    |> Enum.map(&Marketplace.Game.create_product/1)
+    |> Enum.sort_by(fn product_attributes -> product_attributes.resource.tier end)
+    |> Enum.map(fn product_attributes ->
+      player = product_attributes.plot.player
+      case product_attributes.resource.material_costs do
+        [] -> Marketplace.Game.create_product(product_attributes)
+        _ ->
+          Marketplace.Repo.transaction(fn ->
+            product_attributes.resource.material_costs
+            |> Enum.map(fn material_cost ->
+              all_product_ids = (player |> Marketplace.Repo.reload |> Marketplace.Repo.preload(:products)).products |> Enum.map(fn product -> product.id end)
+
+              usable_products_query = from(
+                  product in Marketplace.Game.Product,
+                  where: product.resource_id == ^material_cost.required_resource_id and product.id in ^all_product_ids,
+                  limit: ^material_cost.amount
+                )
+              usable_luxury_products_query = from(
+                product in Marketplace.Game.Product,
+                where: product.resource_id == ^material_cost.required_resource.luxury_id and product.id in ^all_product_ids,
+                limit: ^material_cost.amount
+              )
+              usable_products = [usable_products_query, usable_luxury_products_query] |> Enum.flat_map(&Marketplace.Repo.all/1)
+              require IEx; IEx.pry
+              if length(usable_products) >= material_cost.amount do
+                usable_products |> Enum.take(material_cost.amount) |> Enum.map(&Marketplace.Game.delete_product/1)
+                Marketplace.Game.create_product(product_attributes)
+              end
+            end)
+          end)
+      end
+    end)
+  end
+
+
+  def produce(output, plot) do
+    quantity = case plot.guilding do
+      0 -> Enum.at(output.amounts, plot.level)
+      _ -> Enum.at(output.amounts, plot.level + 1)
+    end
+
+    products = %{plot: plot, resource: output.resource} |> List.duplicate(quantity)
+
+    case plot.guilding do
+      0 -> products
+      1 -> put_in(products, [Access.at(0), :resource], Enum.at(products, 0).resource.luxury || Enum.at(products, 0).resource)
+      2 -> products |> Enum.map(fn product -> Map.merge(product, %{resource: product.resource.luxury || product.resource}) end)
+    end
   end
 
   @doc """

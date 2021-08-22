@@ -10,6 +10,7 @@ defmodule Marketplace.Game.Plot do
     field :guilding, :integer, default: 0
     belongs_to :player, Marketplace.Game.Player
     belongs_to :generator, Marketplace.Game.Generator
+    has_many :products, Marketplace.Game.Product
 
     timestamps()
   end

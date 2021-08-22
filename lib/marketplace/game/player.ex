@@ -7,6 +7,7 @@ defmodule Marketplace.Game.Player do
   schema "players" do
     field :name, :string
     has_many :plots, Marketplace.Game.Plot
+    has_many :products, through: [:plots, :products]
 
     timestamps()
   end

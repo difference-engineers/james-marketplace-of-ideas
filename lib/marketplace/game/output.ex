@@ -20,19 +20,4 @@ defmodule Marketplace.Game.Output do
     |> put_assoc(:generator, attrs.generator)
     |> validate_required([:amounts])
   end
-
-  def produce(output, plot) do
-    quantity = case plot.guilding do
-      0 -> Enum.at(output.amounts, plot.level)
-      _ -> Enum.at(output.amounts, plot.level + 1)
-    end
-
-    products = %{plot: plot, resource: output.resource} |> List.duplicate(quantity)
-
-    case plot.guilding do
-      0 -> products
-      1 -> put_in(products, [Access.at(0), :resource], Enum.at(products, 0).resource.luxury || Enum.at(products, 0).resource )
-      2 -> products |> Enum.map(fn product -> Map.merge(product, %{resource: product.resource.luxury || product.resource}) end)
-    end
-  end
 end
