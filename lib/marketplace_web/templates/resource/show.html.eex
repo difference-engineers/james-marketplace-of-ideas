@@ -1,0 +1,38 @@
+<h1>Show Resource</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @resource.name %>
+  </li>
+
+  <li>
+    <strong>Export:</strong>
+    <%= @resource.export %>
+  </li>
+
+  <li>
+    <strong>Import:</strong>
+    <%= @resource.import %>
+  </li>
+
+  <li>
+    <strong>Tier:</strong>
+    <%= @resource.tier %>
+  </li>
+
+  <li>
+    <strong>Perishable:</strong>
+    <%= @resource.perishable %>
+  </li>
+
+  <li>
+    <strong>Importable:</strong>
+    <%= @resource.importable %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.resource_path(@conn, :edit, @resource) %></span>
+<span><%= link "Back", to: Routes.resource_path(@conn, :index) %></span>

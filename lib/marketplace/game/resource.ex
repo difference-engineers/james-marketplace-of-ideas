@@ -21,6 +21,7 @@ defmodule Marketplace.Game.Resource do
   @doc false
   def changeset(record, attrs) do
     record
+    |> Marketplace.Repo.preload(:luxury)
     |> cast(attrs, [:name, :tier, :export, :import, :perishable, :importable])
     |> put_assoc(:luxury, Map.get(attrs, :luxury))
     |> validate_required([:name, :tier, :export, :import, :perishable, :importable])

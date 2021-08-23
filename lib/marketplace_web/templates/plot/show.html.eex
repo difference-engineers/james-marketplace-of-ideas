@@ -1,0 +1,15 @@
+<h1>Show Plot</h1>
+
+<ul>
+  <li>
+    <strong>Owner:</strong>
+    <%= @product.player.name %>
+  </li>
+  <li>
+    <strong>Generator:</strong>
+    <%= @product.generator.name %>
+  </li>
+</ul>
+
+<span><%= link "Edit", to: Routes.plot_path(@conn, :edit, @plot) %></span>
+<span><%= link "Back", to: Routes.plot_path(@conn, :index) %></span>

@@ -15,9 +15,10 @@ defmodule Marketplace.Game.Output do
   @doc false
   def changeset(record, attrs) do
     record
+    |> Marketplace.Repo.preload([:resource, :generator])
     |> cast(attrs, [:amounts])
-    |> put_assoc(:resource, attrs.resource)
-    |> put_assoc(:generator, attrs.generator)
+    |> put_assoc(:resource, Map.get(attrs, :resource))
+    |> put_assoc(:generator, Map.get(attrs, :generator))
     |> validate_required([:amounts])
   end
 end

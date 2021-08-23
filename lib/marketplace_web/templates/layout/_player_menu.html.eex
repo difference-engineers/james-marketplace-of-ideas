@@ -1,0 +1,11 @@
+<ul class="dropdown-menu" aria-labelledby="player-links">
+  <li class="dropdown-item"><%= link "List", to: Routes.player_path(@conn, :index), class: "nav-link" %></li>
+<%= if @current_player do %>
+  <li class="dropdown-item"><%= @current_player.email %></li>
+  <li class="dropdown-item"><%= link "Settings", to: Routes.player_settings_path(@conn, :edit), class: "nav-link" %></li>
+  <li class="dropdown-item"><%= link "Log out", to: Routes.player_session_path(@conn, :delete), method: :delete, class: "nav-link" %></li>
+<% else %>
+  <li class="dropdown-item"><%= link "Register", to: Routes.player_registration_path(@conn, :new), class: "nav-link" %></li>
+  <li class="dropdown-item"><%= link "Log in", to: Routes.player_session_path(@conn, :new), class: "nav-link" %></li>
+<% end %>
+</ul>

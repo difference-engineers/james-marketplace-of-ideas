@@ -15,9 +15,10 @@ defmodule Marketplace.Game.MaterialCost do
   @doc false
   def changeset(material_cost, attrs) do
     material_cost
+    |> Marketplace.Repo.preload([:product_resource, :required_resource])
     |> cast(attrs, [:amount])
-    |> put_assoc(:product_resource, attrs.product_resource)
-    |> put_assoc(:required_resource, attrs.required_resource)
+    |> put_assoc(:product_resource, Map.get(attrs, :product_resource))
+    |> put_assoc(:required_resource, Map.get(attrs, :required_resource))
     |> validate_required([:amount])
   end
 end

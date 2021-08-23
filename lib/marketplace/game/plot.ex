@@ -8,7 +8,7 @@ defmodule Marketplace.Game.Plot do
   schema "plots" do
     field :level, :integer, default: 0
     field :guilding, :integer, default: 0
-    belongs_to :player, Marketplace.Game.Player
+    belongs_to :player, Marketplace.Accounts.Player
     belongs_to :generator, Marketplace.Game.Generator
     has_many :products, Marketplace.Game.Product
 
@@ -18,9 +18,10 @@ defmodule Marketplace.Game.Plot do
   @doc false
   def changeset(record, attrs) do
     record
+    |> Marketplace.Repo.preload([:player, :generator])
     |> cast(attrs, [:level, :guilding])
-    |> put_assoc(:player, attrs.player)
-    |> put_assoc(:generator, attrs.generator)
+    |> put_assoc(:player, Map.get(attrs, :player))
+    |> put_assoc(:generator, Map.get(attrs, :generator))
     |> validate_required([:level, :guilding])
   end
 end

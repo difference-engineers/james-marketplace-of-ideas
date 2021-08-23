@@ -1,0 +1,26 @@
+<h1>Listing Plots</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Owner</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for plot <- @plots do %>
+    <tr>
+      <td><%= plot.player.name %></td>
+      <td><%= plot.generator.name %></td>
+      <td>
+        <span><%= link "Show", to: Routes.plot_path(@conn, :show, plot) %></span>
+        <span><%= link "Edit", to: Routes.plot_path(@conn, :edit, plot) %></span>
+        <span><%= link "Delete", to: Routes.plot_path(@conn, :delete, plot), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Plot", to: Routes.plot_path(@conn, :new) %></span>
