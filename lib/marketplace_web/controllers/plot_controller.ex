@@ -10,12 +10,12 @@ defmodule MarketplaceWeb.PlotController do
   end
 
   def new(conn, _params) do
-    changeset = Game.change_plot(%Plot{})
+    changeset = Game.change_plot(%Plot{player: conn.assigns.current_player})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"plot" => plot_params}) do
-    case Game.create_plot(plot_params) do
+    case Game.create_plot(Map.merge(plot_params, %{player: conn.assigns.current_player})) do
       {:ok, plot} ->
         conn
         |> put_flash(:info, "Plot created successfully.")
