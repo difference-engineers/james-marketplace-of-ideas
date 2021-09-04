@@ -3,7 +3,7 @@ defmodule Marketplace.Release do
   Used for executing DB release tasks when run in production without Mix
   installed.
   """
-  @app :hello_elixir
+  @app :marketplace
 
   def migrate do
     load_app()
